@@ -1,0 +1,23 @@
+---
+- name: Install python-docker
+  apt:
+    name: python-docker
+
+- name: Get latest Docker image
+  docker_image:
+    name: "collabora/code"
+    force: True
+
+- name: Start collabora Docker container
+  docker_container:
+    name: "collabora-online"
+    image: "collabora/code"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ collabora_ports }}"
+    env:
+      domain: "{{ collabora_domains | mandatory }}"
+    capabilities:
+    - "MKNOD"
+
