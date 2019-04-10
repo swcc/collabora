@@ -1,14 +1,14 @@
 ---
-- name: "install required packages"
+- name: Install python-docker
   apt:
     name: python-docker
 
-- name: "Get latest Docker image"
+- name: Get latest Docker image
   docker_image:
     name: "collabora/code"
-    force: "true"
+    force: True
 
-- name: Start container
+- name: Start collabora Docker container
   docker_container:
     name: "collabora-online"
     image: "collabora/code"

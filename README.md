@@ -4,7 +4,7 @@ Installs the collabora docker container and runs it
 ## Requirements
 
 Debian or Ubuntu
-An install [docker instance](https://github.com/stuvusIT/docker/)
+An installed [docker instance](https://github.com/stuvusIT/docker/)
 
 ## Role Variables
 
@@ -14,7 +14,7 @@ An install [docker instance](https://github.com/stuvusIT/docker/)
 | `collabora_domains` | :heavy_check_mark:    | Domain where your nextcloud is running |
 | `collabora_ports`   | `127.0.0.1:9980:9980` | Port the docker container listens on   |
 
-Example
+## Example
 
 ```yaml
 collabora:
