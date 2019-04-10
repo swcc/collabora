@@ -1,11 +1,10 @@
 # collabora
 Installs the collabora docker container and runs it
 
-
 ## Requirements
 
 Debian or Ubuntu
-An install docker instance
+An install [docker instance](https://github.com/stuvusIT/docker/)
 
 ## Role Variables
 
