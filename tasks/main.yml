@@ -1,23 +1,65 @@
 ---
-- name: Install python-docker
+- name: Add Collabora repo key
+  apt_key: 
+    keyserver: keyserver.ubuntu.com
+    id: 6CCEA47B2281732DF5D504D00C54D189F4BA284D
+
+- name: Add Collabora repos
+  apt_repository:
+    repo: "{{ item }}" 
+  with_items:
+    - deb https://collaboraoffice.com/repos/CollaboraOnline/CODE /
+    - deb http://security.ubuntu.com/ubuntu xenial-security main     # Leave this here! libpng12-0 is no longer available on newer Ubuntu versions, but loolwsd won't install without it
+
+- name: Install 
   apt:
-    name: python-docker
+    name:
+      - loolwsd
+      - code-brand
+      - collaboraoffice6.0-dict*
+      - collaboraofficebasis6.0*
+      - inotify-tools
+      - psmisc
+      - python-lxml
 
-- name: Get latest Docker image
-  docker_image:
-    name: "collabora/code"
-    force: True
+- name: Fix domain name resolution from jails (copied from https://github.com/CollaboraOnline/Docker-CODE/blob/master/scripts/start-libreoffice.sh)
+  copy:
+    src: /etc/resolv.conf
+    dest: /opt/lool/systemplate/etc
 
-- name: Start collabora Docker container
-  docker_container:
-    name: "collabora-online"
-    image: "collabora/code"
-    state: started
-    restart_policy: always
-    ports:
-      - "{{ collabora_ports }}"
-    env:
-      domain: "{{ collabora_domains | mandatory }}"
-    capabilities:
-    - "MKNOD"
+- name: Fix domain name resolution from jails (copied from https://github.com/CollaboraOnline/Docker-CODE/blob/master/scripts/start-libreoffice.sh)
+  copy:
+    src: /etc/hosts
+    dest: /opt/lool/systemplate/etc
+
+- name: Replace trusted host
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/storage/wopi/host[1]
+    value: "{{ collabora_domain }}"
+
+- name: set admin username
+  xml: 
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/admin_console/username
+    value: "{{ collabora_username }}"
+
+- name: Replace trusted host 
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/storage/webdav/host
+    value: "{{ collabora_domain | mandatory }}"
+
+- name: set admin password
+  xml: 
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/admin_console/password
+    value: "{{ collabora_password }}"
+
+- name: set server name
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/server_name
+    value: "{{ collabora_servername }}"
+
 
