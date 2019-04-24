@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Fritz Otlinghaus
-  description: Start collabora online docker image
+  description: Install and start Collabora online service
   company: stuvus (https://stuvus.uni-stuttgart.de)
 
   license: CC-BY-SA
