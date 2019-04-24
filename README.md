@@ -3,8 +3,8 @@ Installs collabora and runs it
 
 ## Requirements
 
-Debian or Ubuntu
-Webserver to expose Collabora
+Debian or Ubuntu with a webserver that exposes Collabora.
+Note that SSL included in Collabora is deactivated and should be configured in your webserver.
 
 ## Role Variables
 
@@ -36,5 +36,4 @@ This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 Inter
 ## Author Information
 
  * [Rebekka Riedlinger (Rebexter)](https://github.com/Rebexter)_rebekka.riedlinger@stuvus.uni-stuttgart.de_
-
  * [Fritz Otlinghaus (Scriptkiddi)](https://github.com/Scriptkiddi) _fritz.otlinghaus@stuvus.uni-stuttgart.de_
