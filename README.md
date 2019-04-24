@@ -13,7 +13,7 @@ Webserver to expose Collabora
 |:-----------------------|:---------------------:|:----------------------------------------|
 | `collabora_domain`     | :heavy_check_mark:    | Domain where your nextcloud is running  |
 | `collabora_servername` | :heavy_check_mark:    | Domain the collabora instance runs on   |
-| `collabora_passwort`   | :heavy_check_mark:    | Passwort for the Collabora Admin        |
+| `collabora_password`   | :heavy_check_mark:    | Password for the Collabora Admin        |
 | `collabora_username`   | `collabora_admin`     | Admin user for the web interface        |
 
 
