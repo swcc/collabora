@@ -1,17 +1,16 @@
 ---
 - name: Add Collabora repo key
   apt_key: 
-    keyserver: keyserver.ubuntu.com
     id: 6CCEA47B2281732DF5D504D00C54D189F4BA284D
 
 - name: Add Collabora repos
   apt_repository:
     repo: "{{ item }}" 
-  with_items:
+  loop:
     - deb https://collaboraoffice.com/repos/CollaboraOnline/CODE /
     - deb http://security.ubuntu.com/ubuntu xenial-security main     # Leave this here! libpng12-0 is no longer available on newer Ubuntu versions, but loolwsd won't install without it
 
-- name: Install 
+- name: Install all needed packages for collabora online
   apt:
     name:
       - loolwsd
@@ -22,13 +21,15 @@
       - psmisc
       - python-lxml
 
-- name: Fix domain name resolution from jails (copied from https://github.com/CollaboraOnline/Docker-CODE/blob/master/scripts/start-libreoffice.sh)
+- name: Fix domain name resolution from jails # (copied from https://github.com/CollaboraOnline/Docker-CODE/blob/master/scripts/start-libreoffice.sh)
   copy:
+    remote_src: True
     src: /etc/resolv.conf
     dest: /opt/lool/systemplate/etc
 
-- name: Fix domain name resolution from jails (copied from https://github.com/CollaboraOnline/Docker-CODE/blob/master/scripts/start-libreoffice.sh)
+- name: Fix domain name resolution from jails # (copied from https://github.com/CollaboraOnline/Docker-CODE/blob/master/scripts/start-libreoffice.sh)
   copy:
+    remote_src: True
     src: /etc/hosts
     dest: /opt/lool/systemplate/etc
 
@@ -38,11 +39,17 @@
     xpath: /config/storage/wopi/host[1]
     value: "{{ collabora_domain }}"
 
-- name: set admin username
+- name: Set admin username
   xml: 
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/admin_console/username
     value: "{{ collabora_username }}"
+
+- name: Disable Collabora SSL encryption # use SSL provided by nginx instead
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/ssl/enable
+    value: "false"
 
 - name: Replace trusted host 
   xml:
@@ -50,16 +57,31 @@
     xpath: /config/storage/webdav/host
     value: "{{ collabora_domain | mandatory }}"
 
-- name: set admin password
+- name: Set admin password
   xml: 
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/admin_console/password
     value: "{{ collabora_password }}"
+  no_log: True
 
-- name: set server name
+- name: Set Collabora server name
   xml:
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/server_name
     value: "{{ collabora_servername }}"
 
+- name: Install systemd service file (collabora.service)
+  template: 
+    dest: /etc/systemd/system/collabora.service
+    group: root
+    owner: root
+    mode: 0644
+    src: collabora.service
+  register: collaboraservice
+
+- name: Enable and start service
+  systemd:
+    name: collabora.service
+    enabled: True
+    state: started
 

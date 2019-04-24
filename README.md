@@ -1,24 +1,30 @@
 # collabora
-Installs the collabora docker container and runs it
+Installs collabora and runs it
 
 ## Requirements
 
 Debian or Ubuntu
-An installed [docker instance](https://github.com/stuvusIT/docker/)
+Webserver to expose Collabora
 
 ## Role Variables
 
 
-| Name                | Required/Default      | Description                            |
-|:--------------------|:---------------------:|:---------------------------------------|
-| `collabora_domains` | :heavy_check_mark:    | Domain where your nextcloud is running |
-| `collabora_ports`   | `127.0.0.1:9980:9980` | Port the docker container listens on   |
+| Name                   | Required/Default      | Description                             |
+|:-----------------------|:---------------------:|:----------------------------------------|
+| `collabora_domain`     | :heavy_check_mark:    | Domain where your nextcloud is running  |
+| `collabora_servername` | :heavy_check_mark:    | Domain the collabora instance runs on   |
+| `collabora_passwort`   | :heavy_check_mark:    | Passwort for the Collabora Admin        |
+| `collabora_username`   | `collabora_admin`     | Admin user for the web interface        |
+
 
 ## Example
 
 ```yaml
 collabora:
-  - collabora_domains: nextcloud.example.com
+  - collabora_domain: nextcloud.example.de
+    collabora_username: admin
+    collabora_password: YourPassword
+    collabora_servername: collabora.example.de
 ```
 
 
@@ -28,5 +34,7 @@ This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 Inter
 
 
 ## Author Information
+
+ * [Rebekka Riedlinger (Rebexter)](https://github.com/Rebexter)_rebekka.riedlinger@stuvus.uni-stuttgart.de_
 
  * [Fritz Otlinghaus (Scriptkiddi)](https://github.com/Scriptkiddi) _fritz.otlinghaus@stuvus.uni-stuttgart.de_
