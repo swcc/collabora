@@ -20,6 +20,7 @@
       - inotify-tools
       - psmisc
       - python-lxml
+      - python3-lxml
 
 - name: Fix domain name resolution from jails # (copied from https://github.com/CollaboraOnline/Docker-CODE/blob/master/scripts/start-libreoffice.sh)
   copy:
