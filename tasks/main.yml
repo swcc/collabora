@@ -1,11 +1,11 @@
 ---
 - name: Add Collabora repo key
-  apt_key: 
+  apt_key:
     id: 6CCEA47B2281732DF5D504D00C54D189F4BA284D
 
 - name: Add Collabora repos
   apt_repository:
-    repo: "{{ item }}" 
+    repo: "{{ item }}"
   loop:
     - deb https://collaboraoffice.com/repos/CollaboraOnline/CODE /
     - deb http://security.ubuntu.com/ubuntu xenial-security main     # Leave this here! libpng12-0 is no longer available on newer Ubuntu versions, but loolwsd won't install without it
@@ -41,7 +41,7 @@
     value: "{{ collabora_domain }}"
 
 - name: Set admin username
-  xml: 
+  xml:
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/admin_console/username
     value: "{{ collabora_username }}"
@@ -52,14 +52,14 @@
     xpath: /config/ssl/enable
     value: "false"
 
-- name: Replace trusted host 
+- name: Replace trusted host
   xml:
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/storage/webdav/host
     value: "{{ collabora_domain | mandatory }}"
 
 - name: Set admin password
-  xml: 
+  xml:
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/admin_console/password
     value: "{{ collabora_password }}"
@@ -72,7 +72,7 @@
     value: "{{ collabora_servername }}"
 
 - name: Install systemd service file (collabora.service)
-  template: 
+  template:
     dest: /etc/systemd/system/collabora.service
     group: root
     owner: root
