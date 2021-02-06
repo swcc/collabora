@@ -1,6 +1,7 @@
 ---
 - name: Add Collabora repo key
   apt_key:
+    keyserver: keyserver.ubuntu.com
     id: 6CCEA47B2281732DF5D504D00C54D189F4BA284D
 
 - name: Add Collabora repos
