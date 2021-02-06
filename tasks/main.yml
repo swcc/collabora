@@ -91,6 +91,13 @@
     xpath: /config/server_name
     value: "{{ collabora_servername }}"
 
+- name: Set extra parameters
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: "/{{ '/'.join(item.key.split('.')) }}"
+    value: "{{ item.value }}"
+  loop: "{{ collabora_extra_params | dict2items }}"
+
 - name: Install systemd service file (collabora.service)
   template:
     dest: /etc/systemd/system/collabora.service
