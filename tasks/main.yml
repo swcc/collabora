@@ -15,8 +15,8 @@
     name:
       - loolwsd
       - code-brand
-      - collaboraoffice6.0-dict*
-      - collaboraofficebasis6.0*
+      - collaboraoffice{{ collabora_version }}-dict*
+      - collaboraofficebasis{{ collabora_version }}*
       - inotify-tools
       - psmisc
       - python-lxml
