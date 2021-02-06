@@ -42,6 +42,18 @@
     xpath: /config/storage/wopi/host[1]
     value: "{{ collabora_domain }}"
 
+- name: Disable Nextcloud SSL encryption # use SSL provided by nginx instead
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/storage/ssl/enable
+    value: "false"
+
+- name: Enable Nextcloud SSL termination at proxy level # use SSL provided by nginx instead
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/storage/ssl/termination
+    value: "true"
+
 - name: Set admin username
   xml:
     path: /etc/loolwsd/loolwsd.xml
@@ -53,6 +65,12 @@
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/ssl/enable
     value: "false"
+
+- name: Enable Collabora SSL termination at proxy level # use SSL provided by nginx instead
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/ssl/termination
+    value: "true"
 
 - name: Replace trusted host
   xml:
