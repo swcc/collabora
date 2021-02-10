@@ -9,12 +9,14 @@ Note that SSL included in Collabora is deactivated and should be configured in y
 ## Role Variables
 
 
-| Name                   | Required/Default      | Description                             |
-|:-----------------------|:---------------------:|:----------------------------------------|
-| `collabora_domain`     | :heavy_check_mark:    | Domain where your nextcloud is running  |
-| `collabora_servername` | :heavy_check_mark:    | Domain the collabora instance runs on   |
-| `collabora_password`   | :heavy_check_mark:    | Password for the Collabora Admin        |
-| `collabora_username`   | `collabora_admin`     | Admin user for the web interface        |
+| Name                     | Required/Default   | Description                                                                      |
+|:-------------------------|:------------------:|:---------------------------------------------------------------------------------|
+| `collabora_domain`       | :heavy_check_mark: | Domain where your nextcloud is running                                           |
+| `collabora_servername`   | :heavy_check_mark: | Domain the collabora instance runs on                                            |
+| `collabora_password`     | :heavy_check_mark: | Password for the Collabora Admin                                                 |
+| `collabora_username`     | `collabora_admin`  | Admin user for the web interface                                                 |
+| `collabora_version`      | `6.4`              | The version of collabora to install                                              |
+| `collabora_extra_params` | `{}`               | Configure extra collabora system parameters. Use a dot separated string as keys. |
 
 
 ## Example
@@ -25,6 +27,8 @@ collabora:
     collabora_username: admin
     collabora_password: YourPassword
     collabora_servername: collabora.example.de
+    collabora_extra_params:
+      'welcome.enable': false
 ```
 
 

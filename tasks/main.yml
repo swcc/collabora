@@ -1,22 +1,24 @@
 ---
 - name: Add Collabora repo key
   apt_key:
-    id: 6CCEA47B2281732DF5D504D00C54D189F4BA284D
+    keyserver: keyserver.ubuntu.com
+    id: "{{ item }}"
+  loop:
+    - 0C54D189F4BA284D
 
 - name: Add Collabora repos
   apt_repository:
     repo: "{{ item }}"
   loop:
-    - deb https://collaboraoffice.com/repos/CollaboraOnline/CODE /
-    - deb http://security.ubuntu.com/ubuntu xenial-security main     # Leave this here! libpng12-0 is no longer available on newer Ubuntu versions, but loolwsd won't install without it
+    - deb https://www.collaboraoffice.com/repos/CollaboraOnline/CODE-{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }} ./
 
 - name: Install all needed packages for collabora online
   apt:
     name:
       - loolwsd
       - code-brand
-      - collaboraoffice6.0-dict*
-      - collaboraofficebasis6.0*
+      - collaboraoffice{{ collabora_version }}-dict*
+      - collaboraofficebasis{{ collabora_version }}*
       - inotify-tools
       - psmisc
       - python-lxml
@@ -40,6 +42,18 @@
     xpath: /config/storage/wopi/host[1]
     value: "{{ collabora_domain }}"
 
+- name: Disable Nextcloud SSL encryption # use SSL provided by nginx instead
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/storage/ssl/enable
+    value: "false"
+
+- name: Enable Nextcloud SSL termination at proxy level # use SSL provided by nginx instead
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/storage/ssl/termination
+    value: "true"
+
 - name: Set admin username
   xml:
     path: /etc/loolwsd/loolwsd.xml
@@ -51,6 +65,12 @@
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/ssl/enable
     value: "false"
+
+- name: Enable Collabora SSL termination at proxy level # use SSL provided by nginx instead
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: /config/ssl/termination
+    value: "true"
 
 - name: Replace trusted host
   xml:
@@ -70,6 +90,13 @@
     path: /etc/loolwsd/loolwsd.xml
     xpath: /config/server_name
     value: "{{ collabora_servername }}"
+
+- name: Set extra parameters
+  xml:
+    path: /etc/loolwsd/loolwsd.xml
+    xpath: "/{{ '/'.join(item.key.split('.')) }}"
+    value: "{{ item.value }}"
+  loop: "{{ collabora_extra_params | dict2items }}"
 
 - name: Install systemd service file (collabora.service)
   template:
